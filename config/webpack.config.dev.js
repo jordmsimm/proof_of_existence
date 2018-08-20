@@ -113,7 +113,8 @@ module.exports = {
           /\.json$/,
           /\.woff$/,
           /\.woff2$/,
-          /\.(ttf|svg|eot)$/
+          /\.(ttf|svg|eot)$/,
+          /\.scss$/,
         ],
         loader: 'url',
         query: {
@@ -145,6 +146,16 @@ module.exports = {
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
+      {
+        test: /\.scss$/,
+        loaders:[
+        require.resolve("style-loader"),
+        require.resolve("css-loader"),
+        require.resolve("sass-loader")
+        ]
+
+      },
+      
       {
         test: /\.json$/,
         loader: 'json'

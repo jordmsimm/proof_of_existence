@@ -1,0 +1,23 @@
+html {
+    font-size:62.5%;
+}
+
+body{
+    background:$dark-blue;
+    font-family:Helvetica, Arial, sans-serif;
+    font-size:$m-size;
+}
+
+button , .button{
+    background-color:$purple;
+    border:none;
+    border-bottom: .3rem solid darken($purple, 10%);
+    color: white;
+    font-weight:500;
+    padding: $s-size;
+}
+
+button:disabled{
+    cursor:default;
+
+}

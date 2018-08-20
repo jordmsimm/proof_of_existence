@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import ExistenceContract from '../../../../build/contracts/Existence.json';
 import store from '../../../store';
 import {setAllExistenceHash} from '../../../actions/existenceActions';
+import Loader from 'react-loader-spinner';
 
 class AddExistence extends Component {
     constructor(props, { authData }) {
@@ -15,7 +16,8 @@ class AddExistence extends Component {
       state={
         isModalOpen:false,
         imageHash:false,
-        allExistenceHash:null
+        allExistenceHash:null,
+        isLoading:false
         }
 
     
@@ -72,6 +74,7 @@ class AddExistence extends Component {
       onSubmit = async (event) => {
         event.preventDefault();
         //let imageHash;
+        this.setState(() => ({isLoading:true}))
         const contract = require('truffle-contract')
         const existence = contract(ExistenceContract)
         console.log(this.props)
@@ -98,10 +101,11 @@ class AddExistence extends Component {
                     imageHash:false
                 }
             }
-            let allData = this.props.existence.allExistences
-            allData.unshift(data)
-            console.log(allData)
-            const ipfsData = Buffer.from(JSON.stringify(allData));
+
+            //let allData = this.props.existence.allExistences
+            //allData.unshift(data)
+            //console.log(allData)
+            const ipfsData = Buffer.from(JSON.stringify(data));
 
             ipfs.add(ipfsData, (err, ipfsHash) => {
                 if(!err){ 
@@ -112,14 +116,18 @@ class AddExistence extends Component {
                             console.log(existenceInstance.owner.call())
                             //this.setState(() => ({allExistenceHash:ipfsHash[0].hash}))
                             
-                            existenceInstance.updateExistenceHash(ipfsHash[0].hash,{from:coinbase})
+                            existenceInstance.addExistence(ipfsHash[0].hash,{from:coinbase})
                             .then((result)=>{
-                                const results = {
-                                    allExistenceHash: ipfsHash[0].hash
-                                  }
+                                console.log('Existence Added')
+                                this.setState(() => ({isLoading:false}))
+                                this.setState(() => ({isModalOpen:false}))
                                 
-                                console.log(store.dispatch(setAllExistenceHash(results)))
-                                console.log(result)
+                                // const results = {
+                                //     allExistenceHash: ipfsHash[0].hash
+                                //   }
+                                
+                                //console.log(store.dispatch(setAllExistenceHash(results)))
+                                //console.log(result)
                                 //this.setState(() => ({allExistenceHash:ipfsHash[0].hash}))
                             })
                         });
@@ -133,32 +141,6 @@ class AddExistence extends Component {
         }) //await ipfs.add 
 
        
-       //await console.log(data);
-
-        
-        
-
-        
-        
-
-       
-          
-        // let ipfsData = await Buffer.from(JSON.stringify(data));
-        
-        // await ipfs.add(ipfsData, (err, ipfsHash) => {
-        //     console.log('data here ')
-        //     console.log(data)
-        //     if(!err){
-        //         console.log('data hash')
-        //         console.log(ipfsHash[0]);
-        //       }
-        // });
-
-        // await ipfs.add(this.state.buffer, (err, ipfsHash) => {
-        //     if(!err){
-        //       console.log(ipfsHash[0].hash);
-        //     }
-        //   }) //await ipfs.add 
 
       }; //onSubmit 
 
@@ -173,7 +155,12 @@ class AddExistence extends Component {
             closeTimeoutMS={200}
             >
                 <h1>Create a new Proof of Existence</h1>
-                
+                {this.state.isLoading && <Loader 
+                    type="Puff"
+                    color="#00BFFF"
+                    height="100"	
+                    width="100"
+                />   }
                 <form onSubmit={this.onSubmit} >
                     <input 
                         type="text" 
@@ -193,10 +180,9 @@ class AddExistence extends Component {
                     </button>
                 </form>
             </Modal>
-            <p>{this.props.existence && this.props.existence.allExistenceHash}</p>
-        
+            
             <button onClick={this.handleToggleModal}>Add New Existence</button>
-            <button onClick={this.handleGetState}>get state</button>
+            <button className='button'onClick={this.handleGetState}>get state</button>
         </div>
         )}
 } ;

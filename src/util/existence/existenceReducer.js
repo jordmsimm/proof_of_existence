@@ -1,6 +1,7 @@
 const initialState = {
     allExistenceHash: "QmQAeGJwjRHXJLZKFiK7GV5LVjjrgYKAa3Ei1owMjm8hKA",
-    allExistences:[]
+    allExistences:[],
+    totalExistences:0
   }
   
   const existenceReducer = (state = initialState, action) => {
@@ -15,6 +16,13 @@ const initialState = {
     {
       return Object.assign({}, state, {
         allExistences: action.payload.allExistences
+      })
+    }
+
+    if (action.type === 'SET_TOTAL_EXISTENCE')
+    {
+      return Object.assign({}, state, {
+        totalExistences: action.payload.totalExistences
       })
     }
   

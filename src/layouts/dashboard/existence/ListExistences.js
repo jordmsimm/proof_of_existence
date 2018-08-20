@@ -2,9 +2,11 @@ import React , { Component } from 'react';
 import Existence from './Existence';
 import {connect} from 'react-redux';
 import ExistenceContract from '../../../../build/contracts/Existence.json';
-import {setAllExistenceHash,setAllExistences} from '../../../actions/existenceActions';
+import {setAllExistenceHash,setAllExistences,setTotalExistences} from '../../../actions/existenceActions';
 import store from '../../../store';
 import ipfs from '../../../util/ipfs/ipfs';
+import _ from 'lodash';
+
 
 class ListExistences extends Component {
     constructor(props, { authData }) {
@@ -16,41 +18,22 @@ class ListExistences extends Component {
         setTimeout(()=>{
             const contract = require('truffle-contract')
             const existence = contract(ExistenceContract)
-            console.log(this.props)
+            //console.log(this.props)
             existence.setProvider(this.props.web3.currentProvider)
             var existenceInstance;
             this.props.web3.eth.getCoinbase((error, coinbase) => {
                 existence.deployed().then((instance) => {
                     existenceInstance = instance;
-                    console.log(existenceInstance.owner.call())
-                    existenceInstance.getAllExistenceHash.call()
-                    .then((result)=>{
-                        console.log(result)
-                        //if(result){
-                            //console.log('contract done if')
-                            const results = {
-                                allExistenceHash: result
-                              }
-                            console.log(store.dispatch(setAllExistenceHash(results)))
-                            ipfs.cat(this.props.existence.allExistenceHash, (err, res) => {
-                                //console.log(err,ipfsHash);
-                                if(err){
-                                    console.log(err)
-                                }else{
-                                    const results = {
-                                        allExistences:JSON.parse(res.toString('utf8'))
-                                    }
-                                    console.log(results)
-                                    console.log(store.dispatch(setAllExistences(results)))
-                                    console.log(this.props.existence.allExistences)
-                                    //console.log(myData.name)
-                                    
-                                }
-                                //storeFront.ipfsHash = ipfsHash[0].hash
-                            });
-                       //}
+                    //console.log(existenceInstance.owner.call())
+                    existenceInstance.getTotalExistences.call()
+                    .then((results)=>{
+                        const allExistences = results.toNumber();
+                        const result = {
+                            totalExistences:allExistences
+                        }
                         
-                       // this.setState(() => ({allExistenceHash:result}))
+
+                        console.log(store.dispatch(setTotalExistences(result)))
                     })
                 });
             })
@@ -62,17 +45,13 @@ class ListExistences extends Component {
         return(
         <div className='option'>
             <h3>All Existences</h3>
-            <p>{ this.props.existence.allExistenceHash}</p>
-           
-
-            {this.props.existence.allExistences.map((e, index) => ( 
-                
-                <Existence name={JSON.parse(e).title} media={JSON.parse(e).imageHash}/>
-            ) )
-                    
-                }
+            <p>Total Existences: {this.props.existence.totalExistences}</p>
             
-            
+            {this.props.existence.totalExistences >0 &&
+                _.times(this.props.existence.totalExistences,(i)=>{
+                    return <Existence key={i} id={i}/>
+                })
+            } 
         </div>
         )}
 } ;

@@ -11,3 +11,9 @@ export const setAllExistences = (results) => ({
 
 });
 
+export const setTotalExistences = (results) => ({
+    type: 'SET_TOTAL_EXISTENCE',
+        payload: results
+
+});
+

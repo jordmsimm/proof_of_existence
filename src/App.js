@@ -11,6 +11,7 @@ import './css/oswald.css'
 import './css/open-sans.css'
 import './css/pure-min.css'
 import './App.css'
+import './styles/styles.scss'
 
 class App extends Component {
   render() {
@@ -34,6 +35,7 @@ class App extends Component {
 
     return (
       <div className="App">
+        
         <nav className="navbar pure-menu pure-menu-horizontal">
           <Link to="/" className="pure-menu-heading pure-menu-link">Truffle Box</Link>
           <ul className="pure-menu-list navbar-right">
