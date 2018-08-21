@@ -37,7 +37,11 @@ class App extends Component {
       <div className="App">
         
         <nav className="navbar pure-menu pure-menu-horizontal">
-          <Link to="/" className="pure-menu-heading pure-menu-link">Truffle Box</Link>
+          <Link to="/" className="pure-menu-heading pure-menu-link">
+          Proof of Existence
+            
+          </Link>
+          <span className="header__subtitle">Prove it on the blockchain!</span>
           <ul className="pure-menu-list navbar-right">
             <OnlyGuestLinks />
             <OnlyAuthLinks />

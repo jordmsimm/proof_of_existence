@@ -1,0 +1,55 @@
+.existence-container{
+    width:60%;
+    margin:10px auto;
+    text-align:left;
+    clear:both;
+    border-bottom: 4px solid $off-black;
+    display:block;
+    overflow:auto;
+}
+.existence__heading{
+    background-color:$purple;
+    width:100%;
+    min-height:50px;
+    clear:both;
+    display:flex;
+    justify-content:space-between;
+    margin: 0 0 10px 0;
+    
+
+    
+}
+
+.existence__title{
+    float:left;
+    font-weight:bold;
+    font-size:18px;
+    margin-left: 10px;
+    
+}
+
+.existence__time{
+    float:right;
+}
+
+.existence__content{
+    padding:0 0 20px 20px;
+}
+.existence__image{
+    float:left;
+    margin: 0 10px 0 0;
+    width:30%;
+    //clear:left;
+}
+
+.existence__image a{
+    color:$off-white;
+   
+}
+
+.existence__description{
+    padding: 0 0 20px 20px;
+    text-indent:50px;
+    //width:67%;
+    //float:left;
+}

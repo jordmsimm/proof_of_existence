@@ -4,7 +4,7 @@ import ipfs from '../../../util/ipfs/ipfs';
 import {connect} from 'react-redux'
 import ExistenceContract from '../../../../build/contracts/Existence.json';
 import store from '../../../store';
-import {setAllExistenceHash} from '../../../actions/existenceActions';
+import {setAllExistenceHash,setTotalExistences} from '../../../actions/existenceActions';
 import Loader from 'react-loader-spinner';
 
 class AddExistence extends Component {
@@ -121,14 +121,12 @@ class AddExistence extends Component {
                                 console.log('Existence Added')
                                 this.setState(() => ({isLoading:false}))
                                 this.setState(() => ({isModalOpen:false}))
-                                
-                                // const results = {
-                                //     allExistenceHash: ipfsHash[0].hash
-                                //   }
-                                
-                                //console.log(store.dispatch(setAllExistenceHash(results)))
-                                //console.log(result)
-                                //this.setState(() => ({allExistenceHash:ipfsHash[0].hash}))
+                                const totalExistences = this.props.existence.totalExistences + 1;
+                                const results = {
+                                    totalExistences:totalExistences
+                                }
+                                console.log(store.dispatch(setTotalExistences(results)))
+                               
                             })
                         });
                     })
@@ -146,43 +144,64 @@ class AddExistence extends Component {
 
       render() {
         return(
-        <div className='option'>
+        <div className='addexistence-container'>
 
             <Modal
             isOpen={this.state.isModalOpen}
             onRequestClose={this.handleToggleModal}
-            contentLabel="Create New Existence"
             closeTimeoutMS={200}
+            className="modal"
             >
-                <h1>Create a new Proof of Existence</h1>
+                <h1 className="modal__maintitle">Create a new Proof of Existence</h1>
                 {this.state.isLoading && <Loader 
                     type="Puff"
                     color="#00BFFF"
                     height="100"	
                     width="100"
                 />   }
+
+               
                 <form onSubmit={this.onSubmit} >
                     <input 
+                        disabled={this.state.isLoading}
+                        className="modal__title"
                         type="text" 
                         name="title" 
                         placeholder="Add a tiltle"
                         required />
-                    <input 
-                    type = "file"
-                    onChange = {this.captureFile}
-                    />
                     
-                    <textarea name="description" placeholder="Add a description" required/>
+                      
+                    <div class="modal__image">
+                        <label id="#bb" > Choose Media File
+                            <input 
+                                disabled={this.state.isLoading}
+                                type="file" 
+                                id="File"  
+                                onChange = {this.captureFile} 
+                                size="60" 
+                                required/>
+                        </label> 
+                        {this.state.buffer ? 
+                            <span className="modal__imagetext">Image Selected</span>:
+                            <span className="modal__imagetext">No Image Selected</span>}
+                    </div>
+                    <textarea
+                        className="modal__description"
+                        disabled={this.state.isLoading}
+                        name="description" 
+                        placeholder="Add a description" required/>
                     
                     <button 
+                        disabled={this.state.isLoading}
+                        className="modal__submit"
                         type="submit"> 
-                    Submit Data
+                        Submit Data
                     </button>
                 </form>
             </Modal>
             
-            <button onClick={this.handleToggleModal}>Add New Existence</button>
-            <button className='button'onClick={this.handleGetState}>get state</button>
+            <button className = "big-button" onClick={this.handleToggleModal}>Add New Existence</button>
+            
         </div>
         )}
 } ;

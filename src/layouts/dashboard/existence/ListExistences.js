@@ -14,7 +14,15 @@ class ListExistences extends Component {
         authData = this.props
       }
 
-      componentDidMount(){
+    componentDidMount(){
+        this.setExistences()
+    }
+
+    componentDidUpdate() {
+        this.setExistences()
+    }
+
+    setExistences = () =>{
         setTimeout(()=>{
             const contract = require('truffle-contract')
             const existence = contract(ExistenceContract)
@@ -31,8 +39,6 @@ class ListExistences extends Component {
                         const result = {
                             totalExistences:allExistences
                         }
-                        
-
                         console.log(store.dispatch(setTotalExistences(result)))
                     })
                 });
@@ -44,14 +50,18 @@ class ListExistences extends Component {
       render() {
         return(
         <div className='option'>
-            <h3>All Existences</h3>
-            <p>Total Existences: {this.props.existence.totalExistences}</p>
             
-            {this.props.existence.totalExistences >0 &&
-                _.times(this.props.existence.totalExistences,(i)=>{
-                    return <Existence key={i} id={i}/>
-                })
-            } 
+            <div className="existencelist-container">
+            <div className="existencelist__heading">
+                <h1>Existences</h1>
+                <p>Total Existences: {this.props.existence.totalExistences}</p>
+            </div>
+                {this.props.existence.totalExistences >0 &&
+                    _.times(this.props.existence.totalExistences,(i)=>{
+                        return <Existence key={i} id={i}/>
+                    })
+                } 
+            </div>
         </div>
         )}
 } ;

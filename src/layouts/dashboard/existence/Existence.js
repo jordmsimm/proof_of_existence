@@ -22,9 +22,14 @@ class Existence extends Component {
         id:undefined,
         title:undefined,
         imageHash:undefined,
-        timestamp:''
+        timestamp:'',
+        imageError:false
     }
 
+    imageError = () => {
+        var imageError = true;
+        this.setState(() => ({imageError}))
+    }
     componentDidMount(){
         setTimeout(()=>{
             //this.setState(() => ({id:this.props.id}))
@@ -38,7 +43,6 @@ class Existence extends Component {
                 this.props.web3.eth.getCoinbase((error, coinbase) => {
                 existence.deployed().then((instance) => {
                     existenceInstance = instance;
-                    
                     existenceInstance.getSingleExistanceHash(this.props.id, {from:coinbase})
                     .then((results)=>{
                         const [id,ipfsHash,timestamp] = results
@@ -81,16 +85,32 @@ class Existence extends Component {
 
       render() {
         return(
-            <div className='option'>
-            <p>Existence</p>
-            {this.state.title && <h3>{this.state.title}</h3>}
-            {this.state.timestamp && <p>Date {moment.unix(this.state.timestamp).format("MMMM Do YYYY, h:mm:ss a")}</p>}
-            {this.state.imageHash && <img src={"https://ipfs.infura.io/ipfs/" +this.state.imageHash}/>}
-            {this.state.description && <p>Description : {this.state.description}</p>}
-            
-            
-            
-        </div>
+            <div className='existence-container'>
+                <div className="existence__heading">
+                    <div className="existence__title">
+                        {this.state.title && 
+                            <p>{this.state.title}</p>}
+                    </div>
+                    <div className="existence__time">
+                        {this.state.timestamp && 
+                            <p>{moment.unix(this.state.timestamp).format("MMMM Do YYYY, h:mm:ss a")}</p>}
+                    </div>
+                </div>
+                <div className="existence__content">
+                    <div className="existence__image">
+                        {this.state.imageHash && 
+                            <img 
+                                className={this.state.imageError && 'hide'}
+                                src={"https://ipfs.infura.io/ipfs/" +this.state.imageHash}
+                                onError={this.imageError}/>}
+                        { this.state.imageError && <a href={"https://ipfs.infura.io/ipfs/" +this.state.imageHash} target='_blank'> See Media Here </a>}
+                    </div>
+                    <div className="existence__description">
+                        {this.state.description && 
+                            <p>{this.state.description}</p>} 
+                    </div>
+                </div>
+            </div>
         )}
 } ;
 
