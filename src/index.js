@@ -17,13 +17,13 @@ import store from './store'
 
 const history = syncHistoryWithStore(browserHistory, store)
 
-getWeb3
-.then(results => {
-  console.log('Web3 initialized!')
-})
-.catch(() => {
-  console.log('Error in web3 initialization.')
-}) 
+// getWeb3
+// .then(results => {
+//   console.log('Web3 initialized!')
+// })
+// .catch(() => {
+//   console.log('Error in web3 initialization.')
+// }) 
 
 ReactDOM.render((
     <Provider store={store}>
