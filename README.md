@@ -3,6 +3,8 @@ A decentralized application used for storing different types of data for evidenc
 ### Development Tools ###
   * [ganache-cli](https://github.com/trufflesuite/ganache-cli)
   * [truffle](https://github.com/trufflesuite/truffle)
+  * [metamask](https://metamask.io/)
+  * [uport](https://www.uport.me/)
 
 Start ganache:
   ```shell
@@ -13,7 +15,7 @@ Compile contracts:
   truffle compile
 ```
 
-Migrate:
+Migrate contracts to the blockchain:
 ```shell
   truffle migrate
 ```
