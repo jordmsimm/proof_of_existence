@@ -6,6 +6,12 @@ A decentralized application used for storing different types of data for evidenc
   * [metamask](https://metamask.io/)
   * [uport](https://www.uport.me/)
 
+
+Install dependencies:
+  ```shell
+  npm install
+  ```
+  
 Start ganache:
   ```shell
   ganache-cli
