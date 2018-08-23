@@ -1,5 +1,5 @@
 # proof_of_existence
-A decentralized application used for storing different types of data for evidence of its existence at a given time.
+A decentralized application used for storing different types of media and data for evidence of its existence at a given time.
 ### Development Tools ###
   * [ganache-cli](https://github.com/trufflesuite/ganache-cli)
   * [truffle](https://github.com/trufflesuite/truffle)
