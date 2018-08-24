@@ -4,7 +4,7 @@ import ipfs from '../../../util/ipfs/ipfs';
 import {connect} from 'react-redux'
 import ExistenceContract from '../../../../build/contracts/Existence.json';
 import store from '../../../store';
-import {setAllExistenceHash,setTotalExistences} from '../../../actions/existenceActions';
+import {setTotalExistences} from '../../../actions/existenceActions';
 import Loader from 'react-loader-spinner';
 
 class AddExistence extends Component {
@@ -12,72 +12,45 @@ class AddExistence extends Component {
         super(props)
         authData = this.props
       }
-
-      state={
+    state={
         isModalOpen:false,
         imageHash:false,
         allExistenceHash:null,
         isLoading:false
-        }
-
-    
-    //store.dispatch(setAllExistenceHash(results))
-
-    componentDidMount(){
-        setTimeout(()=>{
-
-       
-        const contract = require('truffle-contract')
-        const existence = contract(ExistenceContract)
-        //console.log(this.props)
-        existence.setProvider(this.props.web3.currentProvider)
-        var existenceInstance;
-        this.props.web3.eth.getCoinbase((error, coinbase) => {
-            existence.deployed().then((instance) => {
-                existenceInstance = instance;
-                //console.log(existenceInstance.owner.call())
-                existenceInstance.getAllExistenceHash.call()
-                .then((result)=>{
-                   //console.log(result)
-                    this.setState(() => ({allExistenceHash:result}))
-                })
-            });
-        })
-    },100)
     }
-      handleToggleModal = () =>{
+
+
+    handleToggleModal = () =>{
         //e.preventDefault();
         const _isModalOpen = !this.state.isModalOpen
         this.setState(() => ({isModalOpen:_isModalOpen}))
-      }
+    }
 
-      handleGetState = () =>{
-          console.log(this.props)
-      }
+    handleGetState = () =>{
+        console.log(this.props)
+    }
 
-      convertToBuffer = async(reader) => {
-        //file is converted to a buffer to prepare for uploading to IPFS
-          const buffer = await Buffer.from(reader.result);
-        //set this buffer -using es6 syntax
-          this.setState({buffer});
-      };
+    convertToBuffer = async(reader) => {
+    //file is converted to a buffer to prepare for uploading to IPFS
+        const buffer = await Buffer.from(reader.result);
+    //set this buffer -using es6 syntax
+        this.setState({buffer});
+    };
 
-      captureFile =(event) => {
-        event.stopPropagation()
-        event.preventDefault()
-        const file = event.target.files[0]
-        let reader = new window.FileReader()
-        reader.readAsArrayBuffer(file)
-        reader.onloadend = () => this.convertToBuffer(reader)    
-      };
+    captureFile =(event) => {
+    event.stopPropagation()
+    event.preventDefault()
+    const file = event.target.files[0]
+    let reader = new window.FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onloadend = () => this.convertToBuffer(reader)    
+    };
 
-      onSubmit = async (event) => {
+    onSubmit = async (event) => {
         event.preventDefault();
-        //let imageHash;
         this.setState(() => ({isLoading:true}))
         const contract = require('truffle-contract')
         const existence = contract(ExistenceContract)
-        console.log(this.props)
         existence.setProvider(this.props.web3.currentProvider)
         var existenceInstance;
 
@@ -101,10 +74,6 @@ class AddExistence extends Component {
                     imageHash:false
                 }
             }
-
-            //let allData = this.props.existence.allExistences
-            //allData.unshift(data)
-            //console.log(allData)
             const ipfsData = Buffer.from(JSON.stringify(data));
 
             ipfs.add(ipfsData, (err, ipfsHash) => {
@@ -126,7 +95,7 @@ class AddExistence extends Component {
                                     totalExistences:totalExistences
                                 }
                                 console.log(store.dispatch(setTotalExistences(results)))
-                               
+                                
                             })
                         });
                     })
@@ -137,10 +106,7 @@ class AddExistence extends Component {
                 }
             });
         }) //await ipfs.add 
-
-       
-
-      }; //onSubmit 
+    }; //onSubmit 
 
       render() {
         return(
@@ -177,7 +143,7 @@ class AddExistence extends Component {
                                 disabled={this.state.isLoading}
                                 type="file" 
                                 id="File"  
-                                onChange = {this.captureFile} 
+                                onChange={this.captureFile} 
                                 size="60" 
                                 required/>
                         </label> 
@@ -200,7 +166,7 @@ class AddExistence extends Component {
                 </form>
             </Modal>
             
-            <button className = "big-button" onClick={this.handleToggleModal}>Add New Existence</button>
+            <button className="big-button" onClick={this.handleToggleModal}>Add New Existence</button>
             
         </div>
         )}

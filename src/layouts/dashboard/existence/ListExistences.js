@@ -2,9 +2,8 @@ import React , { Component } from 'react';
 import Existence from './Existence';
 import {connect} from 'react-redux';
 import ExistenceContract from '../../../../build/contracts/Existence.json';
-import {setAllExistenceHash,setAllExistences,setTotalExistences} from '../../../actions/existenceActions';
+import {setTotalExistences} from '../../../actions/existenceActions';
 import store from '../../../store';
-import ipfs from '../../../util/ipfs/ipfs';
 import _ from 'lodash';
 
 
@@ -18,10 +17,6 @@ class ListExistences extends Component {
         this.setExistences()
     }
 
-    componentDidUpdate() {
-        this.setExistences()
-    }
-
     setExistences = () =>{
         setTimeout(()=>{
             const contract = require('truffle-contract')
@@ -30,16 +25,21 @@ class ListExistences extends Component {
             existence.setProvider(this.props.web3.currentProvider)
             var existenceInstance;
             this.props.web3.eth.getCoinbase((error, coinbase) => {
+                console.log(coinbase)
                 existence.deployed().then((instance) => {
                     existenceInstance = instance;
                     //console.log(existenceInstance.owner.call())
-                    existenceInstance.getTotalExistences.call()
+                    existenceInstance.getTotalExistences({from:coinbase})
                     .then((results)=>{
+                        console.log(results)
                         const allExistences = results.toNumber();
                         const result = {
                             totalExistences:allExistences
                         }
-                        console.log(store.dispatch(setTotalExistences(result)))
+                        if(results.toNumber() !== 0){
+                            console.log(store.dispatch(setTotalExistences(result)))
+                        }
+                        
                     })
                 });
             })
@@ -58,6 +58,7 @@ class ListExistences extends Component {
             </div>
                 {this.props.existence.totalExistences >0 &&
                     _.times(this.props.existence.totalExistences,(i)=>{
+                        setTimeout(function(){ console.log('t1me')}, 1000);
                         return <Existence key={i} id={i}/>
                     })
                 } 

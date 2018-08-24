@@ -12,6 +12,7 @@ import moment from 'moment'
 //     </div>
 // ) ;
 
+
 class Existence extends Component {
     constructor(props, { authData }) {
         super(props)
@@ -30,7 +31,7 @@ class Existence extends Component {
         var imageError = true;
         this.setState(() => ({imageError}))
     }
-    componentDidMount(){
+    componentWillMount(){
         setTimeout(()=>{
             //this.setState(() => ({id:this.props.id}))
             console.log(this.props.id)
@@ -45,33 +46,26 @@ class Existence extends Component {
                     existenceInstance = instance;
                     existenceInstance.getSingleExistanceHash(this.props.id, {from:coinbase})
                     .then((results)=>{
-                        const [id,ipfsHash,timestamp] = results
-                        //console.log('resultsfromid')
-
-                        //console.log(imgHash)
+                        const [ipfsHash,timestamp] = results
+                       // console.log(results)
                         if(results){
                             console.log(ipfsHash.length)
-                            if(ipfsHash.length == 46){
+                            if(ipfsHash.length === 46){
                                 ipfs.cat(ipfsHash, (err, res) => {    
                                     if(err){
                                         console.log(err)
                                     }else{
                                         const result = JSON.parse(JSON.parse(res.toString('utf8')))
-                                        console.log(result)
-                                        const {title,description,imageHash} = result
-                                        console.log(description)
+                                       // console.log(result)
+                                        const {title,description,imageHash} = result;
                                         this.setState(() => ({title}))
                                         this.setState(() => ({description}))
                                         this.setState(() => ({imageHash}))
                                         
                                     }
-                                    //storeFront.ipfsHash = ipfsHash[0].hash
                                 });
                             }
-                            this.setState(() => ({id:id.toNumber()}))
-                            //this.setState(() => ({imgHash}))
-
-                            this.setState(() => ({timestamp:timestamp.toNumber()}))
+                            this.setState(() => ({timestamp:timestamp}))
                         }
                         
                     })
@@ -100,6 +94,7 @@ class Existence extends Component {
                     <div className="existence__image">
                         {this.state.imageHash && 
                             <img 
+                                alt="Exists"
                                 className={this.state.imageError && 'hide'}
                                 src={"https://ipfs.infura.io/ipfs/" +this.state.imageHash}
                                 onError={this.imageError}/>}

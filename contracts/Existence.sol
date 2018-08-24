@@ -1,61 +1,67 @@
 pragma solidity ^0.4.23;
 
-import "./Ownable.sol";
-//import "./zeppelin/ownership/Ownable.sol";
+//import "./Ownable.sol";
+import "../installed_contracts/zeppelin/contracts/ownership/Ownable.sol";
+/** @title Existence. */
 contract Existence is Ownable{
-    
     mapping (address =>ExistenceOwner) existenceOwner;
     struct ExistenceOwner {
         uint totalExistences;
-        string allExistencesHash;
         mapping(uint => Existance) existences;
     }
-    
+    bool eStop;
     
     struct Existance{
         uint id;
         string hash;
         uint dateTimestamp;
     }
-
-
-    function addExistence(  string _existencesHash) public {
-        
-        //this function updates the hash for all existances stored on ipfs
+    
+    constructor(){
+        eStop = false;
+    }
+    
+    modifier isStopped() {
+        require(eStop != true);
+        _;
+     }
+    
+      /** @dev Allows owner to toggle emergency stop functionality*/
+     function toggleEStop() public onlyOwner{
+          eStop = !eStop;
+     }
+      
+      /** @dev Adds new ipfs hash to existence wwner mapping
+      * @param _existencesHash Hash of data stored on ipfs
+      */
+    function addExistence(  string _existencesHash)  public isStopped{
+        //check to make sure hash is valid
         bytes memory inputLength = bytes(_existencesHash);
         require(inputLength.length == 46 );
+
+        //get total existences for user
         uint _totalExistences = existenceOwner[msg.sender].totalExistences;
-      
+        
+        //save data & timestamp to verify the time the data was saved on ipfs
         existenceOwner[msg.sender].existences[_totalExistences].hash = _existencesHash;
         existenceOwner[msg.sender].existences[_totalExistences].dateTimestamp= now;
         existenceOwner[msg.sender].totalExistences = _totalExistences + 1;
      }    
-   
-
-     function updateExistenceHash( string _allExistencesHash) public {
-        bytes memory inputLength = bytes(_allExistencesHash);
-        require(inputLength.length == 46 );
-        existenceOwner[msg.sender].allExistencesHash = _allExistencesHash;
-     }
      
+      /** @dev Returns total existences a user has stored
+      * @return totalExistences Number of existences.
+      */
      function getTotalExistences() view returns (uint totalExistences){
         return existenceOwner[msg.sender].totalExistences;
      }
-
-     function getAllExistenceHash() view returns (string allExistencesHash){
-        return existenceOwner[msg.sender].allExistencesHash;
-     }
      
-     function getUserInformation() view returns (string _ipfsHash, uint totalExistences){
+     /** @dev Returns a single ipfs has with timestamp
+      * @param _id Id of ipfs hash
+      * @return ipfsHash IPFS hash containing media & data.
+      * @return dateTimestamp Timestamp when data was first stored.
+      */
+     function getSingleExistanceHash(uint _id) view returns ( string _ipfsHash, uint dateTimestamp){
          return(
-             existenceOwner[msg.sender].allExistencesHash,
-             existenceOwner[msg.sender].totalExistences
-             );
-     }
-     
-     function getSingleExistanceHash(uint _id) view returns (uint id, string _ipfsHash, uint dateTimestamp){
-         return(
-             existenceOwner[msg.sender].existences[_id].id,
              existenceOwner[msg.sender].existences[_id].hash,
              existenceOwner[msg.sender].existences[_id].dateTimestamp
              );
