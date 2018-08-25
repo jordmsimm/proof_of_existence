@@ -1,7 +1,7 @@
 pragma solidity ^0.4.23;
 
-import "./Ownable.sol";
-//import "../installed_contracts/zeppelin/contracts/ownership/Ownable.sol";
+//import "./Ownable.sol";
+import "../installed_contracts/zeppelin/contracts/ownership/Ownable.sol";
 /** @title Existence. */
 contract Existence is Ownable{
     mapping (address =>ExistenceOwner) existenceOwner;
