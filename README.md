@@ -6,7 +6,22 @@ A decentralized application used for storing different types of media and data f
   * [metamask](https://metamask.io/)
   * [uport](https://www.uport.me/)
 
+### Interact with rinkeby and uport ###
+The smart contracts are deployed on the rinkeby network and the artifacts are in the build folder. To interact with the dApp, use the uPort mobile app. To start the dApp use the commands below.
 
+Install dependencies:
+  ```shell
+  npm install
+  ```
+  
+Run dev server:
+```shell
+  npm run start
+```
+Then, use the uPort mobile app to sign in and add existences.
+
+  
+### Interact with ganache and metamask ###
 Install dependencies:
   ```shell
   npm install
@@ -21,17 +36,24 @@ Compile contracts:
   truffle compile
 ```
 
-Migrate contracts to the blockchain:
+Migrate contracts to ganache:
 ```shell
   truffle migrate
-```
-
-Run tests:
-```shell
-  truffle test
 ```
 
 Run dev server:
 ```shell
   npm run start
 ```
+
+### Run contract tests using ganache ###
+Start ganache:
+  ```shell
+  ganache-cli
+  ```
+
+Run tests:
+```shell
+  truffle test
+```
+
