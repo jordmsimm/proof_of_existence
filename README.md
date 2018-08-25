@@ -18,6 +18,12 @@ Run dev server:
 ```shell
   npm run start
 ```
+
+View app at: 
+```shell
+  localhost:3000
+```
+
 Then, use the uPort mobile app to sign in and add existences.
 
   
@@ -44,6 +50,11 @@ Migrate contracts to ganache:
 Run dev server:
 ```shell
   npm run start
+```
+
+View app at: 
+```shell
+  localhost:3000
 ```
 
 ### Run contract tests using ganache ###
