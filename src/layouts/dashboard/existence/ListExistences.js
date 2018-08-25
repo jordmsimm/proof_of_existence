@@ -21,11 +21,11 @@ class ListExistences extends Component {
         setTimeout(()=>{
             const contract = require('truffle-contract')
             const existence = contract(ExistenceContract)
-            console.log(this.props)
+            //console.log(this.props)
             existence.setProvider(this.props.web3.currentProvider)
             var existenceInstance;
             this.props.web3.eth.getCoinbase((error, coinbase) => {
-                console.log(coinbase)
+                //console.log(coinbase)
                 existence.deployed().then((instance) => {
                     existenceInstance = instance;
                     //console.log(existenceInstance.owner.call())

@@ -124,7 +124,7 @@ class AddExistence extends Component {
                     color="#00BFFF"
                     height="100"	
                     width="100"
-                />   }
+                />   } 
 
                
                 <form onSubmit={this.onSubmit} >
@@ -137,7 +137,7 @@ class AddExistence extends Component {
                         required />
                     
                       
-                    <div class="modal__image">
+                    <div className="modal__image">
                         <label id="#bb" > Choose Media File
                             <input 
                                 disabled={this.state.isLoading}

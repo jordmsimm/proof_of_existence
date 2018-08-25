@@ -1,4 +1,4 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
+//var SimpleStorage = artifacts.require("./SimpleStorage.sol");
 var ExistenceStorage = artifacts.require("./Existence.sol");
 var OwnableStorage = artifacts.require("./Ownable.sol");
 
