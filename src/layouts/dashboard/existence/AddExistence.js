@@ -19,9 +19,8 @@ class AddExistence extends Component {
         isLoading:false
     }
 
-
     handleToggleModal = () =>{
-        //e.preventDefault();
+        //toggles modal for data form
         const _isModalOpen = !this.state.isModalOpen
         this.setState(() => ({isModalOpen:_isModalOpen}))
     }
@@ -38,15 +37,17 @@ class AddExistence extends Component {
     };
 
     captureFile =(event) => {
-    event.stopPropagation()
-    event.preventDefault()
-    const file = event.target.files[0]
-    let reader = new window.FileReader()
-    reader.readAsArrayBuffer(file)
-    reader.onloadend = () => this.convertToBuffer(reader)    
+        //gets file uploaded in modal to convert to buffer
+        event.stopPropagation()
+        event.preventDefault()
+        const file = event.target.files[0]
+        let reader = new window.FileReader()
+        reader.readAsArrayBuffer(file)
+        reader.onloadend = () => this.convertToBuffer(reader)    
     };
 
     onSubmit = async (event) => {
+        //adds form data to ipfs and smart contract
         event.preventDefault();
         this.setState(() => ({isLoading:true}))
         const contract = require('truffle-contract')
@@ -57,7 +58,7 @@ class AddExistence extends Component {
         const title = event.target.elements.title.value.trim();
         const description = event.target.elements.description.value.trim();
 
-        //if(this.state.buffer){
+       
         await ipfs.add(this.state.buffer, (err, ipfsHash) => {
             console.log(ipfsHash[0].hash)
             let data;
@@ -82,8 +83,6 @@ class AddExistence extends Component {
                     this.props.web3.eth.getCoinbase((error, coinbase) => {
                         existence.deployed().then((instance) => {
                             existenceInstance = instance;
-                            console.log(existenceInstance.owner.call())
-                            //this.setState(() => ({allExistenceHash:ipfsHash[0].hash}))
                             
                             existenceInstance.addExistence(ipfsHash[0].hash,{from:coinbase})
                             .then((result)=>{
@@ -93,8 +92,8 @@ class AddExistence extends Component {
                                 const totalExistences = this.props.existence.totalExistences + 1;
                                 const results = {
                                     totalExistences:totalExistences
-                                }
-                                console.log(store.dispatch(setTotalExistences(results)))
+                            }
+                            store.dispatch(setTotalExistences(results))
                                 
                             })
                         });
@@ -165,9 +164,7 @@ class AddExistence extends Component {
                     </button>
                 </form>
             </Modal>
-            
             <button className="big-button" onClick={this.handleToggleModal}>Add New Existence</button>
-            
         </div>
         )}
 } ;

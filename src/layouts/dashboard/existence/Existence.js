@@ -3,15 +3,6 @@ import {connect} from 'react-redux';
 import ipfs from '../../../util/ipfs/ipfs';
 import ExistenceContract from '../../../../build/contracts/Existence.json';
 import moment from 'moment'
-// const Existence = (props) =>(
-//     <div className='option'>
-//         <p>Existence</p>
-//         {props.name && <p>{props.name}</p>}
-//         {props.media && <img src={"https://ipfs.infura.io/ipfs/" +props.media}/>}
-        
-//     </div>
-// ) ;
-
 
 class Existence extends Component {
     constructor(props, { authData }) {
@@ -33,46 +24,43 @@ class Existence extends Component {
     }
     componentWillMount(){
         setTimeout(()=>{
-            //this.setState(() => ({id:this.props.id}))
             console.log(this.props.id)
-            // if(this.props.id){
-                const contract = require('truffle-contract')
-                const existence = contract(ExistenceContract)
-                console.log(this.props)
-                existence.setProvider(this.props.web3.currentProvider)
-                var existenceInstance;
-                this.props.web3.eth.getCoinbase((error, coinbase) => {
-                existence.deployed().then((instance) => {
-                    existenceInstance = instance;
-                    existenceInstance.getSingleExistanceHash(this.props.id, {from:coinbase})
-                    .then((results)=>{
-                        const [ipfsHash,timestamp] = results
-                       // console.log(results)
-                        if(results){
-                            console.log(ipfsHash.length)
-                            if(ipfsHash.length === 46){
-                                ipfs.cat(ipfsHash, (err, res) => {    
-                                    if(err){
-                                        console.log(err)
-                                    }else{
-                                        const result = JSON.parse(JSON.parse(res.toString('utf8')))
-                                       // console.log(result)
-                                        const {title,description,imageHash} = result;
-                                        this.setState(() => ({title}))
-                                        this.setState(() => ({description}))
-                                        this.setState(() => ({imageHash}))
-                                        
-                                    }
-                                });
-                            }
-                            this.setState(() => ({timestamp:timestamp}))
+            const contract = require('truffle-contract')
+            const existence = contract(ExistenceContract)
+            console.log(this.props)
+            existence.setProvider(this.props.web3.currentProvider)
+            var existenceInstance;
+            this.props.web3.eth.getCoinbase((error, coinbase) => {
+            existence.deployed().then((instance) => {
+                existenceInstance = instance;
+                existenceInstance.getSingleExistanceHash(this.props.id, {from:coinbase})
+                .then((results)=>{
+                    const [ipfsHash,timestamp] = results
+                    // console.log(results)
+                    if(results){
+                        console.log(ipfsHash.length)
+                        if(ipfsHash.length === 46){
+                            ipfs.cat(ipfsHash, (err, res) => {    
+                                if(err){
+                                    console.log(err)
+                                }else{
+                                    const result = JSON.parse(JSON.parse(res.toString('utf8')))
+                                    const {title,description,imageHash} = result;
+                                    this.setState(() => ({title}))
+                                    this.setState(() => ({description}))
+                                    this.setState(() => ({imageHash}))
+                                    
+                                }
+                            });
                         }
-                        
-                    })
+                        this.setState(() => ({timestamp:timestamp}))
+                    }
+                    
+                 })
 
                 });
             })
-        // }
+        
         },100)
     }
 
