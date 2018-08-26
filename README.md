@@ -1,5 +1,5 @@
 # proof_of_existence
-A decentralized application used for storing different types of media and data for evidence of its existence at a given time.
+A decentralized application used for storing different types of media and data for evidence of its existence at a given time. Data is stored on the interplanetary file system (IPFS), then the hash of the datas location is stored on the ethereum blockchain with an immutable timestamp to gurantee existence of the data.
 ### Development Tools ###
   * [ganache-cli](https://github.com/trufflesuite/ganache-cli)
   * [truffle](https://github.com/trufflesuite/truffle)
