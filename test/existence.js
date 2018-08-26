@@ -3,6 +3,8 @@ var Existence = artifacts.require("./Existence.sol");
 contract('Existence', function(accounts) {
 
 it("...should return the owner of the contract", function() {
+  //Retuns the owners address of the existence contract
+  //Makes sure ownership contract is importerd and used corectly
     return Existence.deployed().then(function(instance) {
         existenceInstance = instance;
         return existenceInstance.owner.call();
@@ -12,6 +14,8 @@ it("...should return the owner of the contract", function() {
 });
  
 it("...should tansfer ownership to different account", function() {
+    //Transfers ownership of the contract to another address
+    //Makes sure ownership contract is importerd and used corectly
     return Existence.deployed().then(function(instance) {
       existenceInstance = instance;
       return existenceInstance.transferOwnership(accounts[1], {from: accounts[0]});
@@ -24,6 +28,7 @@ it("...should tansfer ownership to different account", function() {
   });
 
   it("...should store the value hash QmVAka4j65NpsFenYc4fn3KS1sryBw1n9GwYvUcgFsNUs7.", function() {
+    //Makes sure that users can store ipfs hash correctly
     return Existence.deployed().then(function(instance) {
       existenceInstance = instance;
       return existenceInstance.addExistence("QmVAka4j65NpsFenYc4fn3KS1sryBw1n9GwYvUcgFsNUs7", {from: accounts[0]});
@@ -35,6 +40,7 @@ it("...should tansfer ownership to different account", function() {
   });
 
   it("...should return the value 1", function() {
+    // Used to test if users can query total number of existences
     return Existence.deployed().then(function(instance) {
       existenceInstance = instance;
       return existenceInstance.getTotalExistences({from:accounts[0]});
@@ -44,6 +50,7 @@ it("...should tansfer ownership to different account", function() {
   });
 
   it("...should not store the value hash QmVAka4j65NpsFenYc4fn3KS1sryBw1n9GwYvUcgFsN.", function() {
+    //Used to test data integrity
     return Existence.deployed().then(function(instance) {
       existenceInstance = instance;
       return existenceInstance.addExistence("QmVAka4j65NpsFenYc4fn3KS1sryBw1n9GwYvUcgFsN", {from: accounts[0]});
@@ -56,6 +63,7 @@ it("...should tansfer ownership to different account", function() {
   });
 
   it("...should set emergengy stop", function() {
+    //Used to make sure emergency logic works correctly
     return Existence.deployed().then(function(instance) {
       existenceInstance = instance;
       return existenceInstance.toggleEStop( {from: accounts[0]});
